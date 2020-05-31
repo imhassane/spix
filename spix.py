@@ -4,7 +4,7 @@ from tracker import Tracker
 
 class SPIX:
     rows = ['url']
-    input_address = None
+    input_address = 'data.txt'
     input_content = None
     input_type = 'txt'
 
@@ -15,32 +15,38 @@ class SPIX:
     threads = []
 
     @classmethod
-    def get_input(cls, ext='txt', address='data'):
+    def get_input(cls):
 
-        if ext == 'txt':
-            SPIX.input_type = 'txt'
+        if SPIX.input_type not in ['txt']:
+            raise ValueError("The extension " + SPIX.input_type + " is not supported for now")
 
-        else:
-            raise ValueError("The extension " + ext + " is not supported for now")
+        try:
+            with open(SPIX.input_address, 'r') as f:
+                SPIX.input_content = f.read().strip().split("\n")
 
-        SPIX.input_address = address
-
-        with open(address, 'r') as f:
-            SPIX.input_content = f.read().strip().split("\n")
+        except FileNotFoundError:
+            print("The input file does not exist")
+            exit(1)
 
     @classmethod
     def run(cls):
         Tracker.rows = SPIX.rows
 
-        for index, row in enumerate(SPIX.input_content):
-            row = row.split(' ')
-            if len(row) != len(SPIX.rows):
-                raise ValueError("The file is not malformed, the lines has different number of columns")
+        try:
 
-            tracker = Tracker(locker=SPIX.locker, data=row)
-            tracker.start()
+            for index, row in enumerate(SPIX.input_content):
+                row = row.split(' ')
+                if len(row) != len(SPIX.rows):
+                    raise ValueError("The file is not malformed, the lines has different number of columns")
 
-            SPIX.threads.append(tracker)
+                tracker = Tracker(locker=SPIX.locker, data=row)
+                tracker.start()
+
+                SPIX.threads.append(tracker)
+
+        except TypeError:
+            print("An error occurred: looping a NoneType variable")
+            exit(1)
 
     @classmethod
     def dump_output(cls):
@@ -57,9 +63,14 @@ class SPIX:
 
         rows = ' '.join(SPIX.rows)
 
-        with open(filename, 'w') as f:
-            f.write(rows + "\n")
-            f.write(data)
+        try:
+            with open(filename, 'w') as f:
+                f.write(rows + "\n")
+                f.write(data)
+
+        except FileNotFoundError:
+            print("The output file does not exist")
+            exit(1)
 
 
 if __name__ == "__main__":
@@ -67,7 +78,10 @@ if __name__ == "__main__":
     SPIX.rows.append("table")
     SPIX.rows.append("id")
 
-    SPIX.get_input(ext='txt', address='test.txt')
+    SPIX.input_type = 'txt'
+    SPIX.input_address = 'test.txt'
+
+    SPIX.get_input()
     SPIX.run()
 
     for t in SPIX.threads:
