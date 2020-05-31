@@ -62,7 +62,8 @@ class SPIX:
 if __name__ == "__main__":
     SPIX.get_input(ext='txt', address='test.txt')
     SPIX.run()
-    SPIX.dump_output()
 
     for t in SPIX.threads:
         t.join()
+
+    SPIX.dump_output()
