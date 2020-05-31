@@ -1,1 +1,3 @@
-https://not-an-url.com
+url table id
+https://not-an-url.com/hello.gif t_covers_cov 5
+https://inc.api/martin.png t_covers_cov 10

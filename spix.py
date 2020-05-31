@@ -26,7 +26,7 @@ class SPIX:
         SPIX.input_address = address
 
         with open(address, 'r') as f:
-            SPIX.input_content = f.read().split("\n")
+            SPIX.input_content = f.read().strip().split("\n")
 
     @classmethod
     def run(cls):
@@ -55,11 +55,18 @@ class SPIX:
 
             data += result.lstrip() + "\n"
 
+        rows = ' '.join(SPIX.rows)
+
         with open(filename, 'w') as f:
+            f.write(rows + "\n")
             f.write(data)
 
 
 if __name__ == "__main__":
+
+    SPIX.rows.append("table")
+    SPIX.rows.append("id")
+
     SPIX.get_input(ext='txt', address='test.txt')
     SPIX.run()
 
