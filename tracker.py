@@ -15,7 +15,8 @@ class Tracker(Thread):
     @classmethod
     def is_url_broken(cls, url):
         try:
-            requests.get(url)
+            # We do not need the body, just the headers to check if the resource exists.
+            requests.head(url)
             return False
         except requests.exceptions.ConnectionError:
             return True
