@@ -1,4 +1,0 @@
-https://google.fr t_suggetions_sug 2
-https://theoncebook.wordpress.com t_favorites_fav 100
-https://not-an-url.com/hello.gif t_covers_cov 5
-https://inc.api/martin.png t_covers_cov 10
